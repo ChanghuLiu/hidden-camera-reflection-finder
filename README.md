@@ -4,4 +4,4 @@ Hidden Camera Reflection Finder is an Android app that helps users visually chec
 
 ## Privacy Policy
 
-[View Privacy Policy](privacy-policy.md)
+[View Privacy Policy](privacy-policy.html)

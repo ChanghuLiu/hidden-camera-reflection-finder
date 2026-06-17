@@ -232,7 +232,10 @@ Backend:
 The app does not use a backend server.
 
 Limitation:
-This app helps users find possible lens reflections. It does not guarantee detection of all hidden cameras.""",
+This app helps users find possible lens reflections. It does not guarantee detection of all hidden cameras.
+
+Privacy Policy URL:
+https://changhuliu.github.io/hidden-camera-reflection-finder/privacy-policy.html""",
         onBack = onBack
     )
 }

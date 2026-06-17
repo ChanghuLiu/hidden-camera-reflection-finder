@@ -1,6 +1,4 @@
-# Privacy Policy for Hidden Camera Reflection Finder
-
-Last updated: June 17, 2026
+# Privacy Policy
 
 Hidden Camera Reflection Finder uses the device camera to help users visually check possible lens reflections.
 
@@ -28,6 +26,6 @@ The app does not use a backend server.
 
 This app helps users find possible lens reflections. It does not guarantee detection of all hidden cameras.
 
-## Contact
+## Privacy Policy URL
 
-Email: liuchanghu2018@gmail.com
+https://changhuliu.github.io/hidden-camera-reflection-finder/privacy-policy.html

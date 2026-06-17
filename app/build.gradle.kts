@@ -27,6 +27,7 @@ android {
     defaultConfig {
         applicationId = "com.hidden.camera.reflection.finder"
         minSdk = 26
+        //noinspection EditedTargetSdkVersion
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"

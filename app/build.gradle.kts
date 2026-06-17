@@ -1,12 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
 
 val releasePropertiesFile = rootProject.file("release.properties")
-val releaseProperties = java.util.Properties().apply {
+val releaseProperties = Properties().apply {
     if (releasePropertiesFile.isFile) {
-        releasePropertiesFile.inputStream().use(::load)
+        releasePropertiesFile.inputStream().use { input ->
+            load(input)
+        }
     }
 }
 val hasReleaseSigning = listOf(

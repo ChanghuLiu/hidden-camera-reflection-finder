@@ -56,7 +56,8 @@ fun CameraPreviewScreen(
     val overlayViewState = remember { mutableStateOf<DetectionOverlayView?>(null) }
     val cameraState = remember { mutableStateOf<Camera?>(null) }
     var sensitivity by remember { mutableFloatStateOf(0.72f) }
-    var torchOn by remember { mutableStateOf(true) }
+    var torchOn by remember { mutableStateOf(false) }
+    var hasFlashUnit by remember { mutableStateOf(true) }
     var hasDetection by remember { mutableStateOf(false) }
 
     DisposableEffect(Unit) {
@@ -66,8 +67,10 @@ fun CameraPreviewScreen(
         }
     }
 
-    LaunchedEffect(torchOn) {
-        cameraState.value?.cameraControl?.enableTorch(torchOn)
+    LaunchedEffect(torchOn, hasFlashUnit) {
+        if (hasFlashUnit) {
+            cameraState.value?.cameraControl?.enableTorch(torchOn)
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -107,7 +110,13 @@ fun CameraPreviewScreen(
             cameraExecutor = cameraExecutor,
             detector = detector,
             sensitivityProvider = { sensitivity },
-            onDetectionChanged = { hasDetection = it }
+            onDetectionChanged = { hasDetection = it },
+            onFlashAvailabilityChanged = { available ->
+                hasFlashUnit = available
+                if (!available) {
+                    torchOn = false
+                }
+            }
         )
 
         Button(
@@ -168,8 +177,16 @@ fun CameraPreviewScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                val noFlashMessage = stringResource(R.string.flashlight_not_available)
+                val context = LocalContext.current
                 Button(
-                    onClick = { torchOn = !torchOn },
+                    onClick = {
+                        if (hasFlashUnit) {
+                            torchOn = !torchOn
+                        } else {
+                            Toast.makeText(context, noFlashMessage, Toast.LENGTH_SHORT).show()
+                        }
+                    },
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(if (torchOn) stringResource(R.string.flashlight_off) else stringResource(R.string.flashlight_on))
@@ -192,7 +209,8 @@ private fun CameraBinder(
     cameraExecutor: ExecutorService,
     detector: BrightSpotDetector,
     sensitivityProvider: () -> Float,
-    onDetectionChanged: (Boolean) -> Unit
+    onDetectionChanged: (Boolean) -> Unit,
+    onFlashAvailabilityChanged: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -236,7 +254,7 @@ private fun CameraBinder(
                         preview,
                         analysis
                     )
-                    camera.cameraControl.enableTorch(true)
+                    onFlashAvailabilityChanged(camera.cameraInfo.hasFlashUnit())
                     cameraState.value = camera
                 } catch (error: Exception) {
                     Toast.makeText(context, context.getString(R.string.camera_failed_to_start, error.message ?: ""), Toast.LENGTH_LONG).show()

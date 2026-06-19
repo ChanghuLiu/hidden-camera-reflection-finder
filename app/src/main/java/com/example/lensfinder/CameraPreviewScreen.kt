@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -116,7 +117,7 @@ fun CameraPreviewScreen(
                 .padding(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.62f))
         ) {
-            Text("Back")
+            Text(stringResource(R.string.back))
         }
 
         Button(
@@ -129,12 +130,12 @@ fun CameraPreviewScreen(
                 .padding(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.62f))
         ) {
-            Text("Exit")
+            Text(stringResource(R.string.exit))
         }
 
         if (hasDetection) {
             Text(
-                text = "Suspicious reflection detected. Check manually.",
+                text = stringResource(R.string.suspicious_reflection_detected),
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -154,7 +155,7 @@ fun CameraPreviewScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = "Brightness sensitivity",
+                text = stringResource(R.string.brightness_sensitivity),
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold
             )
@@ -171,11 +172,11 @@ fun CameraPreviewScreen(
                     onClick = { torchOn = !torchOn },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(if (torchOn) "Flashlight OFF" else "Flashlight ON")
+                    Text(if (torchOn) stringResource(R.string.flashlight_off) else stringResource(R.string.flashlight_on))
                 }
             }
             Text(
-                text = "This tool only helps find lens reflections. It cannot guarantee detection of all hidden cameras.",
+                text = stringResource(R.string.camera_limitation),
                 color = Color.White.copy(alpha = 0.82f)
             )
             Spacer(Modifier.height(4.dp))
@@ -238,7 +239,7 @@ private fun CameraBinder(
                     camera.cameraControl.enableTorch(true)
                     cameraState.value = camera
                 } catch (error: Exception) {
-                    Toast.makeText(context, "Camera failed to start: ${error.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, context.getString(R.string.camera_failed_to_start, error.message ?: ""), Toast.LENGTH_LONG).show()
                 }
             }
             providerFuture.addListener(listener, ContextCompat.getMainExecutor(context))
